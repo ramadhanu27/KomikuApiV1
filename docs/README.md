@@ -74,4 +74,4 @@ Edit `docs/index.html` to customize:
 
 ## License
 
-MIT © VernSG
+

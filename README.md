@@ -100,4 +100,4 @@ Add new tests where appropriate. For scraping updates, verify selectors against 
 
 ## License
 
-MIT © [Your Name](https://github.com/VernSG)
+MIT © [Your Name](https://github.com/ramadhanu27)
