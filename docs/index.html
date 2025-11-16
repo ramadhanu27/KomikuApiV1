@@ -288,6 +288,43 @@ axios.get('https://komiku-api-v1.vercel.app/search', {
     </div>
   </footer>
 
+  <!-- Modal for API Response -->
+  <div id="responseModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-lg max-w-2xl w-full max-h-[80vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-slate-700">
+        <h3 class="text-xl font-semibold">API Response</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="flex-1 overflow-auto p-6">
+        <div class="mb-4">
+          <p class="text-xs text-slate-400 mb-2">Status:</p>
+          <p id="responseStatus" class="text-sm font-semibold text-green-400">200 OK</p>
+        </div>
+        <div>
+          <p class="text-xs text-slate-400 mb-2">Response:</p>
+          <pre id="responseContent" class="bg-slate-950 rounded p-4 text-xs text-slate-300 overflow-x-auto max-h-96">Loading...</pre>
+        </div>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="flex gap-3 p-6 border-t border-slate-700">
+        <button onclick="copyResponse()" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded font-semibold transition">
+          Copy Response
+        </button>
+        <button onclick="closeModal()" class="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded font-semibold transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const endpoints = [
       {
@@ -330,7 +367,7 @@ axios.get('https://komiku-api-v1.vercel.app/search', {
         method: "GET",
         description: "Manga metadata by slug",
         params: "slug",
-        example: "https://komiku-api-v1.vercel.app/detail-komik/one-piece"
+        example: "https://komiku-api-v1.vercel.app/detail-komik/dice"
       },
       {
         path: "/baca-chapter/:slug/:chapter",
@@ -371,15 +408,45 @@ axios.get('https://komiku-api-v1.vercel.app/search', {
 
     // Render endpoints
     const container = document.getElementById('endpoints-container');
-    endpoints.forEach(endpoint => {
+    const endpointStatus = {};
+
+    // Check endpoint status on load
+    async function checkEndpointStatus(url, index) {
+      try {
+        const response = await axios.get(url, { timeout: 5000 });
+        endpointStatus[index] = { status: 'working', code: response.status };
+      } catch (error) {
+        endpointStatus[index] = { status: 'error', code: error.response?.status || 'Error' };
+      }
+      updateEndpointBadge(index);
+    }
+
+    function updateEndpointBadge(index) {
+      const badge = document.getElementById(`status-badge-${index}`);
+      if (!badge) return;
+      
+      const status = endpointStatus[index];
+      if (status?.status === 'working') {
+        badge.innerHTML = '<span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs font-semibold">✓ Working</span>';
+      } else if (status?.status === 'error') {
+        badge.innerHTML = `<span class="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs font-semibold">✗ Error (${status.code})</span>`;
+      } else {
+        badge.innerHTML = '<span class="px-2 py-1 bg-slate-500/20 text-slate-400 rounded text-xs font-semibold">⏳ Checking...</span>';
+      }
+    }
+
+    endpoints.forEach((endpoint, index) => {
       const card = document.createElement('div');
       card.className = 'endpoint-card bg-slate-900/50 border border-slate-800 rounded-lg p-6 space-y-4';
       card.innerHTML = `
         <div class="flex items-start justify-between">
-          <div>
-            <div class="flex items-center gap-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-3 mb-2">
               <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded text-xs font-semibold">${endpoint.method}</span>
               <code class="text-lg font-mono font-semibold text-white">${endpoint.path}</code>
+            </div>
+            <div id="status-badge-${index}">
+              <span class="px-2 py-1 bg-slate-500/20 text-slate-400 rounded text-xs font-semibold">⏳ Checking...</span>
             </div>
           </div>
         </div>
@@ -397,17 +464,55 @@ axios.get('https://komiku-api-v1.vercel.app/search', {
         </button>
       `;
       container.appendChild(card);
+      
+      // Check status after a short delay to avoid overwhelming the server
+      setTimeout(() => checkEndpointStatus(endpoint.example, index), index * 500);
     });
 
     // Test endpoint function
     async function testEndpoint(url) {
+      const modal = document.getElementById('responseModal');
+      const statusEl = document.getElementById('responseStatus');
+      const contentEl = document.getElementById('responseContent');
+      
+      modal.classList.remove('hidden');
+      contentEl.textContent = 'Loading...';
+      statusEl.textContent = 'Loading...';
+      
       try {
         const response = await axios.get(url);
-        alert('Success! Response:\n\n' + JSON.stringify(response.data, null, 2).substring(0, 500) + '...');
+        statusEl.textContent = `${response.status} ${response.statusText || 'OK'}`;
+        statusEl.className = 'text-sm font-semibold text-green-400';
+        contentEl.textContent = JSON.stringify(response.data, null, 2);
       } catch (error) {
-        alert('Error: ' + (error.response?.statusText || error.message));
+        const status = error.response?.status || 'Error';
+        const statusText = error.response?.statusText || error.message;
+        statusEl.textContent = `${status} ${statusText}`;
+        statusEl.className = 'text-sm font-semibold text-red-400';
+        contentEl.textContent = JSON.stringify({
+          error: statusText,
+          message: error.message
+        }, null, 2);
       }
     }
+
+    function closeModal() {
+      document.getElementById('responseModal').classList.add('hidden');
+    }
+
+    function copyResponse() {
+      const content = document.getElementById('responseContent').textContent;
+      navigator.clipboard.writeText(content).then(() => {
+        alert('Response copied to clipboard!');
+      });
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('responseModal').addEventListener('click', (e) => {
+      if (e.target.id === 'responseModal') {
+        closeModal();
+      }
+    });
   </script>
 </body>
 </html>

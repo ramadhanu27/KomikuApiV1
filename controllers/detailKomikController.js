@@ -14,7 +14,7 @@ async function scrapeKomikDetail(url) {
         Accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
         "Accept-Language": "en-US,en;q=0.5",
-        Referer: "https://komiku.id/",
+        Referer: "https://komiku.org/",
         "Cache-Control": "public, max-age=3600",
       },
       timeout: 10000, // Timeout 10 detik
@@ -204,25 +204,25 @@ async function scrapeKomikDetail(url) {
         ...firstChapter,
         originalLink: firstChapterLink?.startsWith("http")
           ? firstChapterLink
-          : `https://komiku.id${firstChapterLink}`,
+          : `https://komiku.org${firstChapterLink}`,
       },
       latestChapter: {
         ...latestChapter,
         originalLink: latestChapterLink?.startsWith("http")
           ? latestChapterLink
-          : `https://komiku.id${latestChapterLink}`,
+          : `https://komiku.org${latestChapterLink}`,
       },
       chapters: chapters.map((chapter) => ({
         ...chapter,
         originalLink: chapter.originalLink?.startsWith("http")
           ? chapter.originalLink
-          : `https://komiku.id${chapter.originalLink}`,
+          : `https://komiku.org${chapter.originalLink}`,
       })),
       similarKomik: similarKomik.map((komik) => ({
         ...komik,
         originalLink: komik.originalLink?.startsWith("http")
           ? komik.originalLink
-          : `https://komiku.id${komik.originalLink}`,
+          : `https://komiku.org${komik.originalLink}`,
       })),
     };
   } catch (error) {

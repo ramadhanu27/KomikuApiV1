@@ -6,7 +6,6 @@ const router = express.Router();
 
 const URL_KOMIKU = "https://komiku.org/";
 
-const URL_LOCAL = "https://mangaverse.my.id/";
 // GET /genre/:slug - Mendapatkan manga berdasarkan genre (halaman 1)
 // router.get("/:slug", async (req, res) => {
 //   req.params.page = "1";
