@@ -1,0 +1,13 @@
+{
+  "name": "komiku-api-docs",
+  "version": "1.0.0",
+  "description": "Documentation website for Komiku Rest API",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server -p 3000 -c-1",
+    "start": "npx http-server -p 3000 -c-1"
+  },
+  "keywords": ["komiku", "api", "documentation", "manga"],
+  "author": "VernSG",
+  "license": "MIT"
+}

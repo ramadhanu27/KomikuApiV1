@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Komiku Rest API - Documentation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    .gradient-text {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .endpoint-card {
+      transition: all 0.3s ease;
+    }
+    .endpoint-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.2);
+    }
+    .code-block {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-white">
+  <!-- Navigation -->
+  <nav class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold">
+          K
+        </div>
+        <span class="text-xl font-bold">Komiku API</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="#endpoints" class="text-slate-300 hover:text-white transition">Endpoints</a>
+        <a href="#examples" class="text-slate-300 hover:text-white transition">Examples</a>
+        <a href="https://github.com/VernSG" target="_blank" class="text-slate-300 hover:text-white transition">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden py-20 sm:py-32">
+    <div class="absolute inset-0 bg-gradient-to-b from-blue-500/10 via-transparent to-transparent"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center space-y-6">
+        <p class="text-sm font-semibold uppercase tracking-widest text-blue-400">Welcome to</p>
+        <h1 class="text-5xl sm:text-6xl font-bold gradient-text">Komiku Rest API</h1>
+        <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+          A powerful RESTful API for scraping and serving manga/manhwa/manhua data from Komiku.id with built-in rate limiting and CORS support.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+          <a href="#endpoints" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition">
+            Explore Endpoints
+          </a>
+          <a href="https://komiku-api-v1.vercel.app" target="_blank" class="px-8 py-3 border border-slate-600 hover:border-slate-400 rounded-lg font-semibold transition">
+            API Base URL
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Stats -->
+  <section class="py-12 border-y border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-blue-400">11+</div>
+          <p class="text-slate-400 mt-2">API Endpoints</p>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-purple-400">100%</div>
+          <p class="text-slate-400 mt-2">JSON Responses</p>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-pink-400">Real-time</div>
+          <p class="text-slate-400 mt-2">Data Scraping</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Endpoints Section -->
+  <section id="endpoints" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="space-y-12">
+        <div class="text-center space-y-4">
+          <h2 class="text-4xl font-bold">API Endpoints</h2>
+          <p class="text-slate-400 max-w-2xl mx-auto">
+            All endpoints return JSON responses. Use GET requests to fetch data from Komiku.id
+          </p>
+        </div>
+
+        <!-- Endpoints Grid -->
+        <div class="grid gap-6" id="endpoints-container">
+          <!-- Will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Examples Section -->
+  <section id="examples" class="py-20 bg-slate-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="space-y-12">
+        <div class="text-center space-y-4">
+          <h2 class="text-4xl font-bold">Usage Examples</h2>
+          <p class="text-slate-400">See how to use the API in your projects</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+          <!-- JavaScript Example -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold">JavaScript / Fetch</h3>
+            <div class="code-block rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-300"><code>// Fetch rekomendasi
+fetch('https://komiku-api-v1.vercel.app/rekomendasi')
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.error(err));
+
+// Search manga
+fetch('https://komiku-api-v1.vercel.app/search?q=one%20piece')
+  .then(res => res.json())
+  .then(data => console.log(data));</code></pre>
+            </div>
+          </div>
+
+          <!-- cURL Example -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold">cURL</h3>
+            <div class="code-block rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-300"><code># Get popular manga
+curl https://komiku-api-v1.vercel.app/komik-populer
+
+# Get detail for a manga
+curl https://komiku-api-v1.vercel.app/detail-komik/one-piece
+
+# Search
+curl "https://komiku-api-v1.vercel.app/search?q=naruto"</code></pre>
+            </div>
+          </div>
+
+          <!-- Python Example -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold">Python</h3>
+            <div class="code-block rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-300"><code>import requests
+
+# Fetch rekomendasi
+response = requests.get(
+  'https://komiku-api-v1.vercel.app/rekomendasi'
+)
+data = response.json()
+print(data)
+
+# Search
+search = requests.get(
+  'https://komiku-api-v1.vercel.app/search',
+  params={'q': 'one piece'}
+)
+print(search.json())</code></pre>
+            </div>
+          </div>
+
+          <!-- Node.js Example -->
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold">Node.js / Axios</h3>
+            <div class="code-block rounded-lg p-4 overflow-x-auto">
+              <pre class="text-sm text-slate-300"><code>const axios = require('axios');
+
+// Fetch rekomendasi
+axios.get('https://komiku-api-v1.vercel.app/rekomendasi')
+  .then(res => console.log(res.data))
+  .catch(err => console.error(err));
+
+// Search
+axios.get('https://komiku-api-v1.vercel.app/search', {
+  params: { q: 'naruto' }
+})
+  .then(res => console.log(res.data));</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="space-y-12">
+        <div class="text-center space-y-4">
+          <h2 class="text-4xl font-bold">Why Use Komiku API?</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-6 space-y-4">
+            <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold">Lightning Fast</h3>
+            <p class="text-slate-400">Real-time data scraping with optimized performance and caching strategies.</p>
+          </div>
+
+          <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-6 space-y-4">
+            <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold">Rate Limited</h3>
+            <p class="text-slate-400">Built-in rate limiting protects the API from abuse and ensures fair usage.</p>
+          </div>
+
+          <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-6 space-y-4">
+            <div class="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold">CORS Enabled</h3>
+            <p class="text-slate-400">Full CORS support allows seamless integration with frontend applications.</p>
+          </div>
+
+          <div class="bg-slate-900/50 border border-slate-800 rounded-lg p-6 space-y-4">
+            <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4m-4-4l-4 4m4-4l4-4"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold">Always Updated</h3>
+            <p class="text-slate-400">Fresh data from Komiku.id scraped in real-time with no database delays.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 py-12 bg-slate-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="space-y-4">
+          <h3 class="font-semibold">API</h3>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li><a href="https://komiku-api-v1.vercel.app" class="hover:text-white transition">Base URL</a></li>
+            <li><a href="https://komiku-api-v1.vercel.app/docs" class="hover:text-white transition">Docs Endpoint</a></li>
+            <li><a href="#endpoints" class="hover:text-white transition">All Endpoints</a></li>
+          </ul>
+        </div>
+        <div class="space-y-4">
+          <h3 class="font-semibold">Resources</h3>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li><a href="#examples" class="hover:text-white transition">Code Examples</a></li>
+            <li><a href="https://komiku.id" target="_blank" class="hover:text-white transition">Komiku.id</a></li>
+            <li><a href="https://github.com/VernSG" target="_blank" class="hover:text-white transition">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="space-y-4">
+          <h3 class="font-semibold">Tech Stack</h3>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li>Express.js</li>
+            <li>Cheerio</li>
+            <li>Axios</li>
+          </ul>
+        </div>
+        <div class="space-y-4">
+          <h3 class="font-semibold">Legal</h3>
+          <ul class="space-y-2 text-sm text-slate-400">
+            <li><a href="#" class="hover:text-white transition">MIT License</a></li>
+            <li><a href="#" class="hover:text-white transition">Terms</a></li>
+            <li><a href="#" class="hover:text-white transition">Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-slate-800 pt-8 text-center text-slate-400 text-sm">
+        <p>&copy; 2024 Komiku Rest API. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const endpoints = [
+      {
+        path: "/rekomendasi",
+        method: "GET",
+        description: "Latest rekomendasi manga",
+        params: "None",
+        example: "https://komiku-api-v1.vercel.app/rekomendasi"
+      },
+      {
+        path: "/terbaru",
+        method: "GET",
+        description: "Fresh chapter releases",
+        params: "None",
+        example: "https://komiku-api-v1.vercel.app/terbaru"
+      },
+      {
+        path: "/pustaka",
+        method: "GET",
+        description: "Home library highlights",
+        params: "None",
+        example: "https://komiku-api-v1.vercel.app/pustaka"
+      },
+      {
+        path: "/berwarna",
+        method: "GET",
+        description: "Colored manga selection",
+        params: "None",
+        example: "https://komiku-api-v1.vercel.app/berwarna"
+      },
+      {
+        path: "/komik-populer",
+        method: "GET",
+        description: "Popular Komiku titles",
+        params: "None",
+        example: "https://komiku-api-v1.vercel.app/komik-populer"
+      },
+      {
+        path: "/detail-komik/:slug",
+        method: "GET",
+        description: "Manga metadata by slug",
+        params: "slug",
+        example: "https://komiku-api-v1.vercel.app/detail-komik/one-piece"
+      },
+      {
+        path: "/baca-chapter/:slug/:chapter",
+        method: "GET",
+        description: "Chapter pages with image URLs",
+        params: "slug, chapter",
+        example: "https://komiku-api-v1.vercel.app/baca-chapter/one-piece/1"
+      },
+      {
+        path: "/search",
+        method: "GET",
+        description: "Search Komiku by keyword",
+        params: "q",
+        example: "https://komiku-api-v1.vercel.app/search?q=naruto"
+      },
+      {
+        path: "/genre-all",
+        method: "GET",
+        description: "List of available genres",
+        params: "None",
+        example: "https://komiku-api-v1.vercel.app/genre-all"
+      },
+      {
+        path: "/genre-detail/:slug",
+        method: "GET",
+        description: "Manga within a genre",
+        params: "slug",
+        example: "https://komiku-api-v1.vercel.app/genre-detail/action"
+      },
+      {
+        path: "/genre-rekomendasi",
+        method: "GET",
+        description: "Featured genre picks",
+        params: "None",
+        example: "https://komiku-api-v1.vercel.app/genre-rekomendasi"
+      }
+    ];
+
+    // Render endpoints
+    const container = document.getElementById('endpoints-container');
+    endpoints.forEach(endpoint => {
+      const card = document.createElement('div');
+      card.className = 'endpoint-card bg-slate-900/50 border border-slate-800 rounded-lg p-6 space-y-4';
+      card.innerHTML = `
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="flex items-center gap-3">
+              <span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded text-xs font-semibold">${endpoint.method}</span>
+              <code class="text-lg font-mono font-semibold text-white">${endpoint.path}</code>
+            </div>
+          </div>
+        </div>
+        <p class="text-slate-300">${endpoint.description}</p>
+        <div class="pt-2">
+          <p class="text-xs text-slate-500 mb-2">Parameters:</p>
+          <code class="text-sm bg-slate-950 rounded px-3 py-2 block text-slate-300">${endpoint.params}</code>
+        </div>
+        <div class="pt-2">
+          <p class="text-xs text-slate-500 mb-2">Example:</p>
+          <code class="text-xs bg-slate-950 rounded px-3 py-2 block text-slate-300 overflow-x-auto">${endpoint.example}</code>
+        </div>
+        <button class="w-full mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm font-semibold transition" onclick="testEndpoint('${endpoint.example}')">
+          Try It
+        </button>
+      `;
+      container.appendChild(card);
+    });
+
+    // Test endpoint function
+    async function testEndpoint(url) {
+      try {
+        const response = await axios.get(url);
+        alert('Success! Response:\n\n' + JSON.stringify(response.data, null, 2).substring(0, 500) + '...');
+      } catch (error) {
+        alert('Error: ' + (error.response?.statusText || error.message));
+      }
+    }
+  </script>
+</body>
+</html>
