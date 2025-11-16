@@ -1,10 +1,3 @@
-<!-- GitAds-Verify: WBSRH26RS33MFZHKP3H9ZYH6UFSEW5LS -->
-
-<p align="center">
-  <img src="https://avatars.githubusercontent.com/u/68459009?v=4" alt="Komiku logo" width="120" />
-  <br />
-  <strong>Komiku Rest API</strong>
-</p>
 
 ## Overview
 
